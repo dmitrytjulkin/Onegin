@@ -1,13 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <assert.h>
 
 #include "onegin.h"
 // stats, fstats?
 void read_text (char** ptr, int* nSymbols)
 {
+    assert (ptr != NULL);
+    assert (nSymbols != NULL);
+
     FILE* poem = fopen("onegin_input.txt","r");
-    size_t size = 5 * sizeof (char), step = 0;
+
+    size_t size = 5 * sizeof (char);
+    size_t step = 0;
     *ptr = (char*) calloc (size + 1, sizeof (char));
 
     *nSymbols = 0;
