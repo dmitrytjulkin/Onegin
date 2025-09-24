@@ -5,10 +5,9 @@
 
 #include "onegin.h"
 // stats, fstats?
-void read_text (char** ptr, int* nSymbols)
+void read_text (char** ptr)
 {
     assert (ptr != NULL);
-    assert (nSymbols != NULL);
 
     FILE* poem = fopen("onegin_input.txt","r");
 
@@ -16,18 +15,15 @@ void read_text (char** ptr, int* nSymbols)
     size_t step = 0;
     *ptr = (char*) calloc (size + 1, sizeof (char));
 
-    *nSymbols = 0;
+    int nSymbols = 0;
 
     while (true) {
         size_t goOut = fread(*ptr + step, sizeof (char), size, poem);
 
-        // printf ("ptr + step:%s\n", ptr + step);
-        // printf ("goOut = %zu, step = %zu, size = %zu", goOut, step, size);
-
         if (goOut == 0)
             break;
 
-        *nSymbols += goOut;
+        nSymbols += goOut;
         step += size;
         size *= 3;
 
