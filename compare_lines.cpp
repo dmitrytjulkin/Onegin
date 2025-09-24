@@ -1,6 +1,18 @@
 #include <stdio.h>
 #include <ctype.h>
 
+enum theBiggestString {
+    firstSmaller = -1,
+    firstEqual,
+    firstBigger
+};
+
+enum whoFinished {
+    firstFinished = 1,
+    secondFinished,
+    bothFinished
+};
+
 #include "onegin.h"
 //
 // int strcmp_function (char* str1, char* end1, char* str2, char* end2);
@@ -28,7 +40,7 @@ int strcmp_function (char* str1, char* end1, char* str2, char* end2)
     while (!isalpha (str2[elem2]))
         ++elem2;
 
-    for ( ; ; elem1++, elem2++) {
+    for ( ; ; ++elem1, ++elem2) {
         if (str1[elem1] == *end1)
             endOfLine1 = 1;
 
@@ -39,15 +51,19 @@ int strcmp_function (char* str1, char* end1, char* str2, char* end2)
             break;
 
         if (tolower (str1[elem1]) != tolower (str2[elem2])) {
-            // printf ("str1[] = %c (%d) and str2[] = %c (%d)\n",
-            // tolower (str1[elem1]), tolower (str1[elem1]), tolower (str2[elem2]), tolower (str2[elem2]));
-            // printf ("diffference %d\n", (int) str1[elem1] - (int) str2[elem2]);
+            printf ("str1[] = %c (%d) and str2[] = %c (%d)\n",
+                    tolower (str1[elem1]), tolower (str1[elem1]),
+                    tolower (str2[elem2]), tolower (str2[elem2]));
+            printf ("diffference %d\n", tolower (str1[elem1]) - tolower (str2[elem2]));
+
             return tolower (str1[elem1]) - tolower (str2[elem2]);
         }
     }
-//
-//     printf ("str1[] = %c (%d) and str2[] = %c (%d)\n", str1[elem1], str1[elem1], str1[elem2], str1[elem2]);
-//     printf ("diffference %d\n", str1[elem1] - str2[elem2]);
+
+    printf ("str1[] = %c (%d) and str2[] = %c (%d)\n",
+            tolower (str1[elem1]), tolower (str1[elem1]),
+            tolower (str2[elem2]), tolower (str2[elem2]));
+    printf ("diffference %d\n", str1[elem1] - str2[elem2]);
 
     return choose_who_is_bigger (endOfLine1, endOfLine2);
 }
@@ -57,15 +73,24 @@ int inverted_strcmp (char* str1, char* end1, char* str2, char* end2)
     char* elem1 = end1, * elem2 = end2;
     int endOfLine1 = 0, endOfLine2 = 0;
 
+    // printf ("end of str1 before skip: %c (%d)\n", *(elem1 - 1), *(elem1 - 1));
+    // printf ("end of str2 before skip: %c (%d)\n", *(elem2 - 1), *(elem2 - 1));
+
     while (!isalpha (*elem1))
         --elem1;
 
     while (!isalpha (*elem2))
         --elem2;
 
-    for ( ; ; elem1--, elem2--) {
-        if (tolower (*elem1) != tolower (*elem2))
+    for ( ; ; --elem1, --elem2) {
+        if (tolower (*elem1) != tolower (*elem2)) {
+            printf ("str1[] = %c (%d) and str2[] = %c (%d)\n",
+                    tolower (*elem1), tolower (*elem1),
+                    tolower (*elem2), tolower (*elem2));
+            printf ("diffference %d\n", tolower (*elem1) - tolower (*elem2));
+
             return tolower (*elem1) - tolower (*elem2);
+        }
 
         if (*elem1 == str1[0])
             endOfLine1 = 1;
@@ -77,9 +102,10 @@ int inverted_strcmp (char* str1, char* end1, char* str2, char* end2)
             break;
     }
 
-    int biggerIs = choose_who_is_bigger (endOfLine1, endOfLine2);
-
-    // printf ("str1[] = %c (%d) and str2[] = %c (%d)\n", *elem1, *elem1, *elem2, *elem2);
+    printf ("str1[] = %c (%d) and str2[] = %c (%d)\n",
+            tolower (*elem1), tolower (*elem1),
+            tolower (*elem2), tolower (*elem2));
+    printf ("diffference %d\n", tolower (*elem1) - tolower (*elem2));
 
     return choose_who_is_bigger (endOfLine1, endOfLine2);
 }
@@ -87,16 +113,16 @@ int inverted_strcmp (char* str1, char* end1, char* str2, char* end2)
 int choose_who_is_bigger (int endOfLine1, int endOfLine2)
 {
     switch (endOfLine1 + endOfLine2) {
-        case 3:
-            return 0;
+        case bothFinished:
+            return firstEqual;
 
-        case 2:
-            return 1;
+        case secondFinished:
+            return firstBigger;
 
-        case 1:
-            return -1;
+        case firstFinished:
+            return firstSmaller;
 
         default:
-            return 0;
+            return firstEqual;
     }
 }

@@ -10,39 +10,40 @@ void bubble_sort_arrptr (char** arrptr, int nLines,
                          int (*strcompare) (char* str1, char* end1, char* str2, char* end2));
 void swap_function (char** p1, char** p2);
 
+// TODO \n\n or {35} \n
+
 int main ()
 {
-    printf ("START\n.....\n");
+    printf (MAG "START\n.....\n" CRESET);
 
     char* bufptr = 0;
 
     read_text (&bufptr);
 
-    printf ("passed reading\n.....\n");
+    printf (GRN "passed reading\n.....\n" CRESET);
 
     int nLines = 0;
     int size = 5;
-    char** arrptr = (char**) calloc (size, sizeof (char*)); // TODO
+    char** arrptr = (char**) calloc (size, sizeof (char*));
 
     fill_arrptr (bufptr, &arrptr, &nLines, &size); // ADD &arrptr
-
-    // printf ("arrptr[0] = %p\n", arrptr[0]);
-    // printf ("arrptr[1] = %p\n", arrptr[1]);
-
-    printf ("passed filling arrptr\n.....\n");
+    printf (GRN "passed filling arrptr\n.....\n" CRESET);
 
     // bubble_sort_arrptr (arrptr, nLines, strcmp_function);
-    // printf ("main() -> arrptr = %p\n", arrptr);
-    print_text (arrptr);
+    // printf (GRN "passed sorting\n.....\n" CRESET);
 
-    printf ("passed printing\n.....\n");
-
-    // bubble_sort_arrptr (arrptr, nLines, inverted_strcmp);
     // print_text (arrptr);
+    // printf (GRN "passed printing\n.....\n" CRESET);
+
+    bubble_sort_arrptr (arrptr, nLines, inverted_strcmp);
+    printf (GRN "passed sorting\n.....\n" CRESET);
+
+    print_text (arrptr);
+    printf (GRN "passed printing\n.....\n" CRESET);
 
     free (bufptr);
 
-    printf ("COMMIT GITHUB!\n");
+    printf (MAG "COMMIT GITHUB!\n" CRESET);
 
     return 0;
 }
@@ -65,17 +66,14 @@ void fill_arrptr (char* bufptr, char*** arrptr, int* nLines, int* size)
             ++(*nLines);
         }
 
-        if (*nLines == *size - 1) { // TODO
+        if (*nLines == *size - 1) {
             *size *= 2;
 
-            if ((*arrptr = (char**) realloc (*arrptr, (*size + 1) * sizeof (char*))) == NULL) // TODO
+            if ((*arrptr = (char**) realloc (*arrptr, (*size + 1) * sizeof (char*))) == NULL)
                 assert (0); // !
         }
 
         ++elem;
-
-        if (*nLines > 6)
-            printf ("arrptr[6] = %p\n", *(*arrptr + 6));
     }
 
     *(*arrptr + *nLines) = bufptr + elem + 1; // for '\0' // !!! "+ 1"
@@ -111,14 +109,18 @@ void bubble_sort_arrptr (char** arrptr, int nLines,
             // printf ("end1 = %d, ", *(*(arrptr + elem) - 1));
             // printf ("end2 = %d\n", *(*(arrptr + elem + 1) - 1));
 
-            printf ("COMPARE\n");
+            printf (YEL "COMPARE\n" CRESET);
+            printf (CYN "comparison between %d and %d:\n" CRESET, elem - 1, elem);
             print_line (*(arrptr + elem - 1), stdout);
             print_line (*(arrptr + elem), stdout);
             printf ("\n\n");
 
-            if (strcompare (*(arrptr + elem - 1), *(arrptr + elem) - 1,
-                             *(arrptr + elem), *(arrptr + elem + 1) - 1) > 0) {
-                printf ("SWAP\n");
+            int resultOfCmp = 0;
+            // printf ("the end of str1: %c%c", *(*(arrptr + elem) - 2), *(*(arrptr + elem) - 1));
+            // printf ("the end of str2: %c%c", *(*(arrptr + elem + 1) - 2), *(*(arrptr + elem + 1) - 1));
+            if ((resultOfCmp = strcompare (*(arrptr + elem - 1), *(arrptr + elem) - 1, // not working for moved strings
+                             *(arrptr + elem), *(arrptr + elem + 1) - 1)) > 0) {
+                printf (YELBG "SWAP" CRESET "\n");
                 print_line (*(arrptr + elem - 1), stdout);
                 print_line (*(arrptr + elem), stdout);
                 printf ("\n\n");
@@ -127,6 +129,8 @@ void bubble_sort_arrptr (char** arrptr, int nLines,
                 // printf ("DA\n");
                 swap_function ((arrptr + elem - 1), (arrptr + elem)); // maybe doesn't work if no \n in the end
             }
+
+            printf ("result of compare: %d\n", resultOfCmp);
             // print_line (*(arrptr + elem - 1), stdout);
             // print_line (*(arrptr + elem), stdout);
 
