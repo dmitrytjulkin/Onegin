@@ -7,7 +7,7 @@
 
 void fill_arrptr (char* bufptr, char*** arrptr, int* nLines, int* size);
 void bubble_sort_arrptr (char** arrptr, int nLines,
-                         int (*strcompare) (char* str1, char* end1, char* str2, char* end2));
+                         int (*strcompare) (char* str1, char* str2));
 void swap_function (char** p1, char** p2);
 
 // TODO \n\n or {35} \n
@@ -19,7 +19,6 @@ int main ()
     char* bufptr = 0;
 
     read_text (&bufptr);
-
     printf (GRN "passed reading\n.....\n" CRESET);
 
     int nLines = 0;
@@ -29,11 +28,11 @@ int main ()
     fill_arrptr (bufptr, &arrptr, &nLines, &size); // ADD &arrptr
     printf (GRN "passed filling arrptr\n.....\n" CRESET);
 
-    // bubble_sort_arrptr (arrptr, nLines, strcmp_function);
-    // printf (GRN "passed sorting\n.....\n" CRESET);
+    bubble_sort_arrptr (arrptr, nLines, strcmp_function);
+    printf (GRN "passed sorting\n.....\n" CRESET);
 
-    // print_text (arrptr);
-    // printf (GRN "passed printing\n.....\n" CRESET);
+    print_text (arrptr);
+    printf (GRN "passed printing\n.....\n" CRESET);
 
     bubble_sort_arrptr (arrptr, nLines, inverted_strcmp);
     printf (GRN "passed sorting\n.....\n" CRESET);
@@ -85,7 +84,7 @@ void fill_arrptr (char* bufptr, char*** arrptr, int* nLines, int* size)
 }
 
 void bubble_sort_arrptr (char** arrptr, int nLines,
-                         int (*strcompare) (char* str1, char* end1, char* str2, char* end2))
+                         int (*strcompare) (char* str1, char* str2))
 {
     assert (arrptr != 0);
     assert (strcompare != 0);
@@ -109,28 +108,29 @@ void bubble_sort_arrptr (char** arrptr, int nLines,
             // printf ("end1 = %d, ", *(*(arrptr + elem) - 1));
             // printf ("end2 = %d\n", *(*(arrptr + elem + 1) - 1));
 
-            printf (YEL "COMPARE\n" CRESET);
-            printf (CYN "comparison between %d and %d:\n" CRESET, elem - 1, elem);
-            print_line (*(arrptr + elem - 1), stdout);
-            print_line (*(arrptr + elem), stdout);
-            printf ("\n\n");
+            // printf (YEL "COMPARE\n" CRESET);
+            // printf (CYN "comparison between %d and %d:\n" CRESET, elem - 1, elem);
+            // print_line (*(arrptr + elem - 1), stdout);
+            // print_line (*(arrptr + elem), stdout);
+            // printf ("\n\n");
 
             int resultOfCmp = 0;
+
             // printf ("the end of str1: %c%c", *(*(arrptr + elem) - 2), *(*(arrptr + elem) - 1));
             // printf ("the end of str2: %c%c", *(*(arrptr + elem + 1) - 2), *(*(arrptr + elem + 1) - 1));
-            if ((resultOfCmp = strcompare (*(arrptr + elem - 1), *(arrptr + elem) - 1, // not working for moved strings
-                             *(arrptr + elem), *(arrptr + elem + 1) - 1)) > 0) {
-                printf (YELBG "SWAP" CRESET "\n");
-                print_line (*(arrptr + elem - 1), stdout);
-                print_line (*(arrptr + elem), stdout);
-                printf ("\n\n");
+
+            if ((resultOfCmp = strcompare (*(arrptr + elem - 1), *(arrptr + elem))) > 0) { // not working for moved strings
+                // printf (YELBG "SWAP" CRESET "\n");
+                // print_line (*(arrptr + elem - 1), stdout);
+                // print_line (*(arrptr + elem), stdout);
+                // printf ("\n\n");
 
                 check = 0;
-                // printf ("DA\n");
+
                 swap_function ((arrptr + elem - 1), (arrptr + elem)); // maybe doesn't work if no \n in the end
             }
 
-            printf ("result of compare: %d\n", resultOfCmp);
+            // printf ("result of compare: %d\n", resultOfCmp);
             // print_line (*(arrptr + elem - 1), stdout);
             // print_line (*(arrptr + elem), stdout);
 

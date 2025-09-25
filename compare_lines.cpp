@@ -15,8 +15,8 @@ enum whoFinished {
 
 #include "onegin.h"
 //
-// int strcmp_function (char* str1, char* end1, char* str2, char* end2);
-// int inverted_strcmp (char* str1, char* end1, char* str2, char* end2);
+// int strcmp_function (char* str1, char* str2);
+// int inverted_strcmp (char* str1, char* str2);
 
 int choose_who_is_bigger (int endOfLine1, int endOfLine2);
 //
@@ -29,7 +29,7 @@ int choose_who_is_bigger (int endOfLine1, int endOfLine2);
 //             inverted_strcmp(str1, str1 + 18, str2, str2 + 18));
 // }
 
-int strcmp_function (char* str1, char* end1, char* str2, char* end2)
+int strcmp_function (char* str1, char* str2)
 {
     int elem1 = 0, elem2 = 0;
     int endOfLine1 = 0, endOfLine2 = 0;
@@ -41,71 +41,76 @@ int strcmp_function (char* str1, char* end1, char* str2, char* end2)
         ++elem2;
 
     for ( ; ; ++elem1, ++elem2) {
-        if (str1[elem1] == *end1)
+        if (str1[elem1] == '\n')
             endOfLine1 = 1;
 
-        if (str2[elem2] == *end2)
+        if (str2[elem2] == '\n')
             endOfLine2 = 2;
 
         if (endOfLine1 + endOfLine2 > 0)
             break;
 
         if (tolower (str1[elem1]) != tolower (str2[elem2])) {
-            printf ("str1[] = %c (%d) and str2[] = %c (%d)\n",
-                    tolower (str1[elem1]), tolower (str1[elem1]),
-                    tolower (str2[elem2]), tolower (str2[elem2]));
-            printf ("diffference %d\n", tolower (str1[elem1]) - tolower (str2[elem2]));
+            // printf ("str1[] = %c (%d) and str2[] = %c (%d)\n",
+            //         tolower (str1[elem1]), tolower (str1[elem1]),
+            //         tolower (str2[elem2]), tolower (str2[elem2]));
+            // printf ("diffference %d\n", tolower (str1[elem1]) - tolower (str2[elem2]));
 
             return tolower (str1[elem1]) - tolower (str2[elem2]);
         }
     }
 
-    printf ("str1[] = %c (%d) and str2[] = %c (%d)\n",
-            tolower (str1[elem1]), tolower (str1[elem1]),
-            tolower (str2[elem2]), tolower (str2[elem2]));
-    printf ("diffference %d\n", str1[elem1] - str2[elem2]);
+    // printf ("str1[] = %c (%d) and str2[] = %c (%d)\n",
+    //         tolower (str1[elem1]), tolower (str1[elem1]),
+    //         tolower (str2[elem2]), tolower (str2[elem2]));
+    // printf ("diffference %d\n", str1[elem1] - str2[elem2]);
 
     return choose_who_is_bigger (endOfLine1, endOfLine2);
 }
 
-int inverted_strcmp (char* str1, char* end1, char* str2, char* end2)
+int inverted_strcmp (char* str1, char* str2)
 {
-    char* elem1 = end1, * elem2 = end2;
+    int elem1 = 0, elem2 = 0;
     int endOfLine1 = 0, endOfLine2 = 0;
 
     // printf ("end of str1 before skip: %c (%d)\n", *(elem1 - 1), *(elem1 - 1));
     // printf ("end of str2 before skip: %c (%d)\n", *(elem2 - 1), *(elem2 - 1));
 
-    while (!isalpha (*elem1))
+    while (*(str1 + elem1) != '\n' && *(str1 + elem1) != '\0')
+        ++elem1;
+    while (*(str2 + elem2) != '\n' && *(str2 + elem2) != '\0')
+        ++elem2;
+
+    while (!isalpha (*(str1 + elem1)))
         --elem1;
 
-    while (!isalpha (*elem2))
+    while (!isalpha (*(str2 + elem2)))
         --elem2;
 
     for ( ; ; --elem1, --elem2) {
-        if (tolower (*elem1) != tolower (*elem2)) {
-            printf ("str1[] = %c (%d) and str2[] = %c (%d)\n",
-                    tolower (*elem1), tolower (*elem1),
-                    tolower (*elem2), tolower (*elem2));
-            printf ("diffference %d\n", tolower (*elem1) - tolower (*elem2));
+        if (tolower (*(str1 + elem1)) != tolower (*(str2 + elem2))) {
+            // printf ("str1[] = %c (%d) and str2[] = %c (%d)\n",
+            //         tolower (*(str1 + elem1)), tolower (*(str1 + elem1)),
+            //         tolower (*(str2 + elem2)), tolower (*(str2 + elem2)));
+            // printf ("diffference %d\n", tolower (*(str1 + elem1)) - tolower (*(str2 + elem2)));
 
-            return tolower (*elem1) - tolower (*elem2);
+            return tolower (*(str1 + elem1)) - tolower (*(str2 + elem2));
         }
 
-        if (*elem1 == str1[0])
+        if (*(str1 + elem1) == str1[0])
             endOfLine1 = 1;
 
-        if (*elem2 == str2[0])
+        if (*(str2 + elem2) == str2[0])
             endOfLine2 = 2;
 
         if (endOfLine1 + endOfLine2 > 0)
             break;
     }
 
-    printf ("str1[] = %c (%d) and str2[] = %c (%d)\n",
-            tolower (*elem1), tolower (*elem1),
-            tolower (*elem2), tolower (*elem2));
-    printf ("diffference %d\n", tolower (*elem1) - tolower (*elem2));
+    // printf ("str1[] = %c (%d) and str2[] = %c (%d)\n",
+    //         tolower (*(str1 + elem1)), tolower (*(str1 + elem1)),
+    //         tolower (*(str2 + elem2)), tolower (*(str2 + elem2)));
+    // printf ("diffference %d\n", tolower (*(str1 + elem1)) - tolower (*(str2 + elem2)));
 
     return choose_who_is_bigger (endOfLine1, endOfLine2);
 }

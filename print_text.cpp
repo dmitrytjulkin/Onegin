@@ -7,7 +7,9 @@ void print_text (char** arrptr)
 {
     assert (arrptr != NULL);
 
-    FILE* poemOut = fopen ("onegin_output.txt", "w");
+    FILE* poemOut = fopen ("onegin_output.txt", "a");
+
+    fputs ("_______________________\n", poemOut);
 
     int step = 0;
 
