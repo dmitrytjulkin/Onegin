@@ -5,7 +5,7 @@
 #define YELBG "\e[43m"
 #define CRESET "\e[0m"
 
-void read_text (char** ptr);
+void read_text (char** ptr, size_t* buf_size);
 
 void print_text (char** arrptr);
 int print_line (char* ptr, FILE* stream);

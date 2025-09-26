@@ -5,7 +5,7 @@
 
 #include "onegin.h"
 
-void fill_arrptr (char* bufptr, char*** arrptr, int* nLines, int* size);
+void fill_arrptr (char* buf_ptr, char*** arrptr, int* nLines, size_t size);
 void bubble_sort_arrptr (char** arrptr, int nLines,
                          int (*strcompare) (char* str1, char* str2));
 void swap_function (char** p1, char** p2);
@@ -16,16 +16,18 @@ int main ()
 {
     printf (MAG "START\n.....\n" CRESET);
 
-    char* bufptr = 0;
+    // FILE* poem_out =
 
-    read_text (&bufptr);
+    char* buf_ptr = 0;
+    size_t buf_size = 0;
+
+    read_text (&buf_ptr, &buf_size);
     printf (GRN "passed reading\n.....\n" CRESET);
 
     int nLines = 0;
-    int size = 5;
-    char** arrptr = (char**) calloc (size, sizeof (char*));
+    char** arrptr = (char**) calloc (buf_size, sizeof (char*));
 
-    fill_arrptr (bufptr, &arrptr, &nLines, &size); // ADD &arrptr
+    fill_arrptr (buf_ptr, &arrptr, &nLines, buf_size); // ADD &arrptr
     printf (GRN "passed filling arrptr\n.....\n" CRESET);
 
     bubble_sort_arrptr (arrptr, nLines, strcmp_function);
@@ -40,42 +42,35 @@ int main ()
     print_text (arrptr);
     printf (GRN "passed printing\n.....\n" CRESET);
 
-    free (bufptr);
+    free (arrptr);
+    free (buf_ptr);
 
     printf (MAG "COMMIT GITHUB!\n" CRESET);
 
     return 0;
 }
 
-void fill_arrptr (char* bufptr, char*** arrptr, int* nLines, int* size)
+void fill_arrptr (char* buf_ptr, char*** arrptr, int* nLines, size_t buf_size)
 {
-    assert (bufptr != NULL);
+    assert (buf_ptr != NULL);
     assert (arrptr != NULL);
     assert (nLines != NULL);
-    assert (size != NULL);
 
     int elem = 0;
     *nLines = 1;
 
-    **arrptr = bufptr;
+    **arrptr = buf_ptr;
 
-    while (*(bufptr + elem) != '\0') {
-        if (*(bufptr + elem) == '\n') {
-            *(*arrptr + *nLines) = bufptr + elem + 1;
+    while (*(buf_ptr + elem) != '\0') {
+        if (*(buf_ptr + elem) == '\n') {
+            *(*arrptr + *nLines) = buf_ptr + elem + 1;
             ++(*nLines);
-        }
-
-        if (*nLines == *size - 1) {
-            *size *= 2;
-
-            if ((*arrptr = (char**) realloc (*arrptr, (*size + 1) * sizeof (char*))) == NULL)
-                assert (0); // !
         }
 
         ++elem;
     }
 
-    *(*arrptr + *nLines) = bufptr + elem + 1; // for '\0' // !!! "+ 1"
+    *(*arrptr + *nLines) = buf_ptr + elem + 1; // for '\0' // !!! "+ 1"
 
     // printf ("arrptr[0] = %p\n", *(*arrptr));
     // printf ("arrptr[1] = %p\n", *(*arrptr + 1));
@@ -144,7 +139,7 @@ void swap_function (char** p1, char** p2)
     assert (p1 != NULL);
     assert (p2 != NULL);
 
-    char* term = *p2;
+    char* temp = *p2;
     *p2 = *p1;
-    *p1 = term;
+    *p1 = temp;
 }
