@@ -7,14 +7,14 @@ void print_text (char** arrptr)
 {
     assert (arrptr != NULL);
 
-    FILE* poemOut = fopen ("onegin_output.txt", "a");
+    FILE* poem_out = fopen ("onegin_output.txt", "a");
 
-    fputs ("_______________________\n", poemOut);
+    fputs ("\n____________________________________________________________________\n", poem_out);
 
     int step = 0;
 
     do {
-        print_line (*(arrptr + step), poemOut);
+        print_line (*(arrptr + step), poem_out);
 
         step++;
 
@@ -37,4 +37,11 @@ int print_line (char* ptr, FILE* stream)
     fputc ('\n', stream);
 
     return elem + 1;
+}
+
+void clean_output ()
+{
+    FILE* poem_out = fopen ("onegin_output.txt", "w+");
+
+    fclose (poem_out);
 }
