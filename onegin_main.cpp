@@ -10,8 +10,6 @@ void bubble_sort_arrptr (char** arrptr, int nLines,
                          int (*strcompare) (char* str1, char* str2));
 void swap_function (char** p1, char** p2);
 
-// TODO \n\n or {35} \n
-
 int main ()
 {
     printf (MAG "START\n.....\n" CRESET);
